@@ -9,13 +9,13 @@ public class App extends PApplet {
     float fieldY = (height - fieldHeight) / 2;
 
     float squareSize = 30;
-    float squareX = 200;
+    float squareX = 400; // starting position
     float squareY = 750 - squareSize;
     float direction = 5;
-    float speed = 10;
+    float speed = 15; // speed of movement of paddle
 
     float square2Size = 30;
-    float squareX2 = fieldX;
+    float squareX2 = 400;
     float squareY2 = fieldY;
     float direction2 = 5;
     float speed2 = 10;
@@ -24,9 +24,10 @@ public class App extends PApplet {
     float ballX = 400;
     float ballY = 300;
     int ballSpeedX = 2;
+    int ballSpeedY = 2;
 
-    int playerOneScore = 0; 
-    int playerTwoScore = 0; 
+    int playerOneScore = 0;
+    int playerTwoScore = 0;
     boolean gameOver = false;
 
     public static void main(String[] args) {
@@ -69,42 +70,64 @@ public class App extends PApplet {
 
         }
         ballX += ballSpeedX;
-        ballY += 1;
+
+        ballY += ballSpeedY;
+
+        if (ballY + ballSize / 2 > fieldY + fieldWidth) {
+
+        }
+
+        // Mr Moden says: explain what this is doing!!
         if (ballX + ballSize / 2 > fieldX + fieldWidth) {
             ballSpeedX = -ballSpeedX;
         }
-
+        //
         if (ballX - ballSize / 2 < fieldX) {
             ballSpeedX = -ballSpeedX;
 
         }
-        if (ballY < fieldY) {
-            System.out.println("Player One Scores");
+        if (ballY + ballSize / 2 > fieldY + fieldHeight) { // Need to edit this to check after collision is working
+            // System.out.println("Player One Scores");
             gameOver = true;
 
         }
-        if (ballY > fieldY + fieldHeight) {
-            System.out.println("Player Two Scores");
+        if (ballY - ballSize / 2 < fieldY) {
             gameOver = true;
-        } else {
+        }
+        if (gameOver) {
             fill(0);
             textSize(50);
             textAlign(CENTER, CENTER);
             text("Game Over", width / 2, height / 2);
+            noLoop(); // Stops the draw loop when the game is over
+        }
+
+        if (ballX > squareX && ballX < squareX + squareSize && ballY + (square2Size / 2) > squareY) {
+            ballSpeedY = -ballSpeedY;
+
+        }
+
+        if (ballY - (ballSize / 2) < squareY2 + square2Size && ballX > squareX2 && ballX < squareX2 + square2Size) {
+            ballSpeedY = -ballSpeedY;
+
         }
 
     }
 
     public void keyPressed() {
-        if (keyCode == LEFT && squareX >= 210) {
+        if (keyCode == LEFT && squareX >= fieldX) {
             squareX -= speed;
-        } else if (keyCode == RIGHT && squareX <= 560) {
+        } else if (keyCode == RIGHT && squareX + squareSize <= fieldX + fieldWidth) {
             squareX += speed;
+
         } else if (key == 'a' && squareX2 >= fieldX) {
-            squareX2 -= speed;
-        } else if (key == 'd' && squareY2 <= fieldY) {
-            squareX2 += speed;
+            squareX2 -= speed2;
+        } else if (key == 'd' && squareX2 + square2Size <= fieldX + fieldWidth) {
+            squareX2 += speed2;
         }
 
     }
 }
+
+//My game is pong. You play it by for one player you use the keys A and D and for player two you use the left and right arrows to move. 
+// When one of the player scores the game is over.
