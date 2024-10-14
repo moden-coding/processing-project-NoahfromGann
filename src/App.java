@@ -31,6 +31,9 @@ public class App extends PApplet {
     int ballSpeedX = 2;
     int ballSpeedY = 2;
 
+    // how many times the ball bounces in one round
+    int bounceCount = 0;
+
     // Game over thing
     boolean gameOver = false;
 
@@ -58,14 +61,22 @@ public class App extends PApplet {
 
     public void setup() {
         background(200); // Set the background color to light gray
+
+        // Randomize ballX and ballY within the game field bounds
+        // ballX = random(fieldX + ballSize / 2, fieldX + fieldWidth - ballSize / 2);
+        // ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
+
+
+        ballX = random(fieldX + fieldY / 2, fieldX + fieldWidth - ballSize / 2);
+        ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
+
     }
 
     public void draw() {
-
+        println();
         if (stage == 1) {
             background(200); // Clear the background each frame
             noFill(); // Disable fill
-
 
             // background(200);
             rect(fieldX, fieldY, fieldWidth, fieldHeight);
@@ -75,9 +86,8 @@ public class App extends PApplet {
 
             fill(70, 119, 199); // Sets the fill color to blue for rectangle
             rect(squareX, squareY, squareSize, squareSize);
-            
+
             rect(squareX2, squareY2, square2Size, square2Size); // Sets the fill color to blue for rectangle
-           
 
             // this determines the ball speed and how fast it goes and to make the ball move
             ballX += ballSpeedX;
@@ -150,6 +160,16 @@ public class App extends PApplet {
             text("Press Spacebar to start", width / 2, 400);
 
         }
+        // Where my bounce counter is one the screen
+        fill(0);
+        textSize(20);
+        text("Bounces:" + bounceCount, 50, 50);
+
+        if (bounceCount == 5) {
+            ballSpeedX += 5;
+            ballSpeedY += 5;
+
+        }
 
     }
 
@@ -169,7 +189,7 @@ public class App extends PApplet {
         }
 
         else if (key == 'r' && gameOver) {
-        resetGame(); // Resets the game when 'R' is pressed
+            resetGame(); // Resets the game when 'R' is pressed
 
         }
 
@@ -179,22 +199,15 @@ public class App extends PApplet {
     public void playerCollision() {
         if (ballX > squareX && ballX < squareX + squareSize && ballY + (square2Size / 2) > squareY) {
             ballSpeedY = -ballSpeedY;
-
+            bounceCount++;
         }
 
-        if (ballX > squareX2 && ballX < squareX2 + square2Size&& ballY - (ballSize / 2) < squareY2 + square2Size ) {
+        if (ballX > squareX2 && ballX < squareX2 + square2Size && ballY - (ballSize / 2) < squareY2 + square2Size) {
             ballSpeedY = -ballSpeedY;
-
+            bounceCount++;
         }
 
     }
 
-    // public boolean collision(float squareXPos, float squareYPos, float squareSize){
-    //     if(){
-    //         return true;
-    //     }else{
-    //         return false;
-        }
 
-        
-    
+}
