@@ -12,15 +12,22 @@ public class App extends PApplet {
     float fieldY = (height - fieldHeight) / 2;
 
     // Bottom square
-    float squareSize = 30;
+    float squareSize = 100;
+    float rectWidth = 60;
+    float rectHeight = 30;
     float squareX = 400; // starting position
-    float squareY = 750 - squareSize;
+    float squareY = 750 - rectHeight;
+
+    float rectX = 400; // starting position
+    float rectY = 750 - rectHeight;
+
     float direction = 5;
-    float speed = 15; // speed of movement of paddle
+    float speed = 30; // speed of movement of paddle
 
     // Top square
-    float square2Size = 30;
-    float squareX2 = 400;
+    float rectWidth2 = 100;
+    float rectHeight2 = 30;
+    float squareX2 = 400 - rectWidth2 / 2;
     float squareY2 = fieldY;
     float speed2 = 10;
 
@@ -44,7 +51,7 @@ public class App extends PApplet {
         ballX = width / 2;
         ballY = height / 2;
         squareX = 400; // Reset paddles to the original position
-        squareX2 = 400;
+        squareX2 = 400 - rectWidth2 / 2;
         ballSpeedX = 2; // Reset ball speed
         ballSpeedY = 2;
         gameOver = false; // Reset game over state
@@ -66,7 +73,6 @@ public class App extends PApplet {
         // ballX = random(fieldX + ballSize / 2, fieldX + fieldWidth - ballSize / 2);
         // ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
 
-
         ballX = random(fieldX + fieldY / 2, fieldX + fieldWidth - ballSize / 2);
         ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
 
@@ -85,9 +91,9 @@ public class App extends PApplet {
             ellipse(ballX, ballY, ballSize, ballSize); // Draw a circle at (400, 300) with a diameter of 100
 
             fill(70, 119, 199); // Sets the fill color to blue for rectangle
-            rect(squareX, squareY, squareSize, squareSize);
+            rect(squareX, squareY, rectWidth, rectHeight);
 
-            rect(squareX2, squareY2, square2Size, square2Size); // Sets the fill color to blue for rectangle
+            rect(squareX2, squareY2, rectWidth, rectHeight); // Sets the fill color to blue for rectangle
 
             // this determines the ball speed and how fast it goes and to make the ball move
             ballX += ballSpeedX;
@@ -158,6 +164,7 @@ public class App extends PApplet {
 
             // How to Start
             text("Press Spacebar to start", width / 2, 400);
+            text("Or to play one person you control both Player 1 and Player 2 with seperate hands", width / 2, 600);
 
         }
         // Where my bounce counter is one the screen
@@ -166,8 +173,8 @@ public class App extends PApplet {
         text("Bounces:" + bounceCount, 50, 50);
 
         if (bounceCount == 5) {
-            ballSpeedX += 5;
-            ballSpeedY += 5;
+            ballSpeedX += 1;
+            ballSpeedY += 1;
 
         }
 
@@ -182,7 +189,7 @@ public class App extends PApplet {
 
         } else if (key == 'a' && squareX2 >= fieldX) {
             squareX2 -= speed2;
-        } else if (key == 'd' && squareX2 + square2Size <= fieldX + fieldWidth) {
+        } else if (key == 'd' && squareX2 + rectWidth2 <= fieldX + fieldWidth) {
             squareX2 += speed2;
         } else if (key == ' ') {
             stage = 1;
@@ -197,17 +204,16 @@ public class App extends PApplet {
 
     // player collision
     public void playerCollision() {
-        if (ballX > squareX && ballX < squareX + squareSize && ballY + (square2Size / 2) > squareY) {
+        if (ballX > squareX && ballX < squareX + rectWidth && ballY + (ballSize / 2) > squareY) {
             ballSpeedY = -ballSpeedY;
             bounceCount++;
         }
 
-        if (ballX > squareX2 && ballX < squareX2 + square2Size && ballY - (ballSize / 2) < squareY2 + square2Size) {
+        if (ballX > squareX2 && ballX < squareX2 + rectWidth2 && ballY - (ballSize / 2) < squareY2 + rectHeight2) {
             ballSpeedY = -ballSpeedY;
             bounceCount++;
         }
 
     }
-
 
 }
