@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 
 public class App extends PApplet {
+
     // Variables that set the heigh and width of my game
     int width = 800;
     int height = 800;
@@ -70,9 +71,6 @@ public class App extends PApplet {
         background(200); // Set the background color to light gray
 
         // Randomize ballX and ballY within the game field bounds
-        // ballX = random(fieldX + ballSize / 2, fieldX + fieldWidth - ballSize / 2);
-        // ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
-
         ballX = random(fieldX + fieldY / 2, fieldX + fieldWidth - ballSize / 2);
         ballY = random(fieldY + ballSize / 2, fieldY + fieldHeight - ballSize / 2);
 
@@ -80,104 +78,66 @@ public class App extends PApplet {
 
     public void draw() {
         println();
+        if (stage == 0) {
+            startScreen();
+        }
         if (stage == 1) {
-            background(200); // Clear the background each frame
-            noFill(); // Disable fill
-
-            // background(200);
-            rect(fieldX, fieldY, fieldWidth, fieldHeight);
-
-            fill(255, 0, 0); // Set the fill color to red for the circle
-            ellipse(ballX, ballY, ballSize, ballSize); // Draw a circle at (400, 300) with a diameter of 100
-
+            mainBackground();
             fill(70, 119, 199); // Sets the fill color to blue for rectangle
             rect(squareX, squareY, rectWidth, rectHeight);
 
             rect(squareX2, squareY2, rectWidth, rectHeight); // Sets the fill color to blue for rectangle
-
-            // this determines the ball speed and how fast it goes and to make the ball move
-            ballX += ballSpeedX;
-            ballY += ballSpeedY;
-
-            // Makes ball bounce off walls
-            if (ballX + ballSize / 2 > fieldX + fieldWidth) {
-                ballSpeedX = -ballSpeedX;
-            }
-
-            // Makes ball bounce off walls
-            if (ballX - ballSize / 2 < fieldX) {
-                ballSpeedX = -ballSpeedX;
-
-            }
+            ballMovement();
 
             // checks if the ball has hit the bottom of the screen and if it does then the
             // game over is true
             if (ballY + ballSize / 2 > fieldY + fieldHeight) {
                 gameOver = true;
-
             }
-            // checks if the ball has hit the top of the screen and if it does then the game
-            // over is true
+            gameEnd();
             if (ballY - ballSize / 2 < fieldY) {
                 gameOver = true;
             }
-            // this code is where the Game Over is placed and it is placed in the middle of
-            // the screen
-            if (gameOver) {
-                fill(0);
-                textSize(50);
-                textAlign(CENTER, CENTER);
-                text("Game Over", width / 2, height / 2);
-                noLoop(); // Stops the draw loop when the game is over
-            }
-
             // Makes sure when the ball hits the bottom or top square then it collides and
             // bounces off of them
             playerCollision();
 
-            // if(collision(ballX, 1, 5,squareX , 1)){
-
-            // }else (collision(ballX, 15, 14, squareX2)){
-
-            // }
-
-            // screen one
-        } else if (stage == 0) {
-            background(255);
-            fill(0);
-
-            // title of the game in the middle
-            textSize(40);
-            textAlign(CENTER, CENTER);
-            text("Welcome to Pong", width / 2, 100);
-
-            // Instrucions for game
-            textSize(20);
-            textAlign(CENTER, CENTER);
-
-            // instructions for the game
-            text("Player 1: Use A and D to move", width / 2, 200);
-            text("Player 2: Use Left and Right arrows to move", width / 2, 240);
-            text(" Player 1 controls the top square, and Player 2 controls the bottom square.", width / 2,
-                    280);
-            text("First to score wins!", width / 2, 320);
-
-            // How to Start
-            text("Press Spacebar to start", width / 2, 400);
-            text("Or to play one person you control both Player 1 and Player 2 with seperate hands", width / 2, 600);
-
         }
-        // Where my bounce counter is one the screen
+    }
+    // Where my bounce counter is one the screen
+
+    public void mainBackground() {
+        background(200); // Clear the background each frame
+        noFill(); // Disable fill
+
+        // background(200);
+        rect(fieldX, fieldY, fieldWidth, fieldHeight);
+
+        fill(255, 0, 0); // Set the fill color to red for the circle
+        ellipse(ballX, ballY, ballSize, ballSize); // Draw a circle at (400, 300) with a diameter of 100
+
+        // Bounce count display
         fill(0);
         textSize(20);
         text("Bounces:" + bounceCount, 50, 50);
 
-        if (bounceCount == 5) {
-            ballSpeedX += 1;
-            ballSpeedY += 1;
+    }
 
+    public void ballMovement() {
+        // this determines the ball speed and how fast it goes and to make the ball move
+        ballX += ballSpeedX;
+        ballY += ballSpeedY;
+
+        // Makes ball bounce off walls
+        if (ballX + ballSize / 2 > fieldX + fieldWidth) {
+            ballSpeedX = -ballSpeedX;
         }
 
+        // Makes ball bounce off walls
+        if (ballX - ballSize / 2 < fieldX) {
+            ballSpeedX = -ballSpeedX;
+
+        }
     }
 
     // how to play
@@ -212,8 +172,52 @@ public class App extends PApplet {
         if (ballX > squareX2 && ballX < squareX2 + rectWidth2 && ballY - (ballSize / 2) < squareY2 + rectHeight2) {
             ballSpeedY = -ballSpeedY;
             bounceCount++;
+
         }
 
+    }
+
+    public void startScreen() {
+        background(255);
+        fill(0);
+
+        // title of the game in the middle
+        textSize(40);
+        textAlign(CENTER, CENTER);
+        text("Welcome to Pong", width / 2, 100);
+
+        // Instructions for the game
+        textSize(20);
+        textAlign(CENTER, CENTER);
+
+        // Instructions for the game
+        text("Player 1: Use A and D to move", width / 2, 200);
+        text("Player 2: Use Left and Right arrows to move", width / 2, 240);
+        text("Player 1 controls the top square, and Player 2 controls the bottom square.", width / 2, 280);
+        text("First to score wins!", width / 2, 320);
+
+        // How to Start
+        text("Press Spacebar to start", width / 2, 400);
+        text("Or to play one person you control both Player 1 and Player 2 with separate hands", width / 2, 600);
+
+        // Bounce count display
+        fill(0);
+        textSize(20);
+        text("Bounces:" + bounceCount, 50, 50);
+
+    }
+
+    public void gameEnd() {
+
+        // this code is where the Game Over is placed and it is placed in the middle of
+        // the screen
+        if (gameOver) {
+            fill(0);
+            textSize(50);
+            textAlign(CENTER, CENTER);
+            text("Game Over", width / 2, height / 2);
+            noLoop(); // Stops the draw loop when the game is over
+        }
     }
 
 }
